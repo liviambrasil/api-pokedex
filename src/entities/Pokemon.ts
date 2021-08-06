@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
-import User from "./User";
 
 @Entity("pokemon")
 export default class Pokemon {
@@ -26,8 +25,4 @@ export default class Pokemon {
 
     @Column()
     description: string;
-
-    @ManyToMany(()=> User, user => user.pokemon)
-    @JoinTable({name: "pokemon_user"})
-    user: User[] 
 }

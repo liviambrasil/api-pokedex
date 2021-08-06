@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne,  } from "typeorm";
-import User from "./User";
 
 @Entity("session")
 export default class Session {
@@ -11,7 +10,4 @@ export default class Session {
 
     @Column()
     userId: number;
-
-    @ManyToOne(()=> User)
-    user: User;
 }

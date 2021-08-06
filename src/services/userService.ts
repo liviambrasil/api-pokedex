@@ -1,6 +1,5 @@
-import { Request, Response } from "express";
-import { Session } from "inspector";
 import { getRepository } from "typeorm";
+import Session from "../entities/Session";
 
 import User from "../entities/User";
 
@@ -26,4 +25,9 @@ async function createSession (body: object) {
   await getRepository(Session).insert(body)
 }
 
-export { getUsers, verifyEmail, signUpUser, createSession }
+async function validateUser (token: string):Promise<Session|undefined> {
+  const validUser =await getRepository(Session).findOne({token})
+  return validUser
+}
+
+export { getUsers, verifyEmail, signUpUser, createSession, validateUser }
