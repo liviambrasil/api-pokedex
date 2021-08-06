@@ -13,6 +13,7 @@ async function signUp (req: Request, res:Response) {
     confirmPassword: joi.valid(joi.ref('password')).required()
   })
   const { error } = schema.validate(req.body)
+  console.log(error)
   if(error) return res.status(400).send({ error: error.details[0].message })
 
   const {email, password} = req.body

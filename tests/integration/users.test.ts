@@ -2,6 +2,7 @@ import supertest from "supertest";
 import { getConnection } from "typeorm";
 
 import app, { init } from "../../src/app";
+import { createUserBody } from "../factories/bodyFactory";
 import { createUser } from "../factories/userFactory";
 import { clearDatabase } from "../utils/database";
 
@@ -17,20 +18,21 @@ afterAll(async () => {
   await getConnection().close();
 });
 
-describe("GET /users", () => {
-  it("should answer with text \"OK!\" and status 200", async () => {
-    const user = await createUser();
+describe("POST /sign-up", () => {
 
-    const response = await supertest(app).get("/users");
+  it("returns status 201 for valid params", async () => {
+    const body = await createUserBody();
+
+    const response = await supertest(app).post("/sign-up").send({...body, confirmPassword:body.password})
     
-    expect(response.body).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          email: user.email
-        })
-      ])
-    );
-
-    expect(response.status).toBe(200);
+    expect(response.status).toEqual(201)
   });
+
+  // it("returns status 409 for duplicate email", async () => {
+  //   const body = await createUser();
+  //   console.log(body)
+  //   const response = await supertest(app).post("/sign-up").send({...body, confirmPassword:body.password})
+    
+  //   expect(response.status).toEqual(409)
+  // });
 });
