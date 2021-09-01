@@ -26,7 +26,7 @@ async function createSession (body: object) {
 }
 
 async function validateUser (token: string):Promise<Session|undefined> {
-  const validUser =await getRepository(Session).findOne({token})
+  const validUser = await getRepository(Session).findOne({token: token})
   return validUser
 }
 

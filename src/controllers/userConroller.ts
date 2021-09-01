@@ -1,19 +1,14 @@
 import { Request, Response } from "express";
-import joi from "joi";
 import bcrypt from "bcrypt";
 import * as uuid from "uuid";
 
 import * as userService from "../services/userService";
+import { signUpSchema } from "../schemas/signUpSchema";
+import { signInSchema } from "../schemas/signInSchema";
 
 async function signUp (req: Request, res:Response) {
   
-  const schema = joi.object({
-    email: joi.string().required(),
-    password: joi.string().required(),
-    confirmPassword: joi.valid(joi.ref('password')).required()
-  })
-  const { error } = schema.validate(req.body)
-  console.log(error)
+  const { error } = signUpSchema.validate(req.body)
   if(error) return res.status(400).send({ error: error.details[0].message })
 
   const {email, password} = req.body
@@ -36,12 +31,9 @@ async function signUp (req: Request, res:Response) {
   }
 }
 
-async function SignIn (req: Request, res:Response) {
-  const schema = joi.object({
-    email: joi.string().required(),
-    password: joi.string().required(),
-  })
-  const { error } = schema.validate(req.body)
+async function signIn (req: Request, res:Response) {
+
+  const { error } = signInSchema.validate(req.body)
   if(error) return res.status(400).send({ error: error.details[0].message })
 
   const {email, password} = req.body
@@ -57,7 +49,7 @@ async function SignIn (req: Request, res:Response) {
 
       await userService.createSession(body)
 
-      res.status(200).send(token)
+      res.send({token: token})
     }
   }
   catch(e) {
@@ -76,4 +68,4 @@ async function getUsers (req: Request, res: Response) {
   }
   }
 
-export { signUp, getUsers }
+export { signUp, signIn, getUsers }

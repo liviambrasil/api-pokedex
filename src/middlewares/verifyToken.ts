@@ -9,7 +9,7 @@ async function verifyToken (req: Request, res: Response, next:NextFunction) {
                 
     if(!validUser) return res.sendStatus(401)
 
-    else res.locals.user = validUser
+    res.locals.user = validUser
 
     next()
 }

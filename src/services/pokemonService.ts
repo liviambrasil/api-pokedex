@@ -1,24 +1,18 @@
 import { getRepository } from "typeorm";
-import { userPokemon } from "../controllers/pokemonController";
 import Pokemon from "../entities/Pokemon";
-import Pokemon_User from "../entities/PokemonUser";
 
-async function addPokemon (userId: number, pokemonId:number) {
-    await getRepository(userPokemon).insert({userId, pokemonId})
+async function addPokemon (pokemonId:number) {
+    await getRepository(Pokemon).update({id: pokemonId},{inMyPokemons: true})
 }
 
-async function removeUserPokemon(userId: number, pokemonId:number) {
-    await getRepository(userPokemon).delete({userId, pokemonId})
+async function removeUserPokemon(pokemonId:number) {
+    await getRepository(Pokemon).update({id: pokemonId},{inMyPokemons: false})
 }
 
-async function getUserPokemons (userId: number) {
-    const pokemonsById = await getRepository(userPokemon).find({userId})
-
-    const arrPokemonsId = pokemonsById.map((pokemon: Pokemon_User) => pokemon.pokemonId)
-
-    const pokemons = await getRepository(Pokemon).findByIds([arrPokemonsId])
+async function getAllPokemons() {
+    const pokemons = await getRepository(Pokemon).find()
 
     return pokemons
 }
 
-export { addPokemon, removeUserPokemon, getUserPokemons }
+export { addPokemon, removeUserPokemon, getAllPokemons }

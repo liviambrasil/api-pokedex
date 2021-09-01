@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity("pokemon")
 export default class Pokemon {
@@ -25,4 +25,7 @@ export default class Pokemon {
 
     @Column()
     description: string;
+
+    @Column({default: false})
+    inMyPokemons: boolean;
 }
